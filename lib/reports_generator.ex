@@ -24,7 +24,7 @@ defmodule ReportsGenerator do
     {:ok, Enum.max_by(report[option], fn {_key, value} -> value end)}
   end
 
-  def fetch_higher_cost(_report, _option), do: {:error,"Invalid Option"}
+  def fetch_higher_cost(_report, _option), do: {:error, "Invalid Option"}
 
   defp sum_values([id, food_name, price], %{"foods" => foods, "users" => users} = report) do
     users = Map.put(users, id, users[id] + price)
