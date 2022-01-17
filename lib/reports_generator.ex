@@ -20,11 +20,17 @@ defmodule ReportsGenerator do
     |> Enum.reduce(report_acc(), fn line, report -> sum_values(line, report) end)
   end
 
+  def build_from_many(file_names) when not is_list(file_names), do: {:error, "Please provide a list of strings"}
+
   def build_from_many(file_names) do
+    result =
     file_names
     |> Task.async_stream(&build/1)
     |> Enum.reduce(report_acc(), fn {:ok, result}, report -> sum_reports(report, result) end)
+
+    {:ok, result}
   end
+
 
   def fetch_higher_cost(report, option)  when option in @options do
     {:ok, Enum.max_by(report[option], fn {_key, value} -> value end)}
